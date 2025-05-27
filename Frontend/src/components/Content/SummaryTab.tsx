@@ -23,7 +23,7 @@ export function SummaryTab({ videoId }: SummaryTabProps) {
         setLoading(true);
         setError(null);
         const response = await axios.post<SummaryResponse>(
-          `${import.meta.env.VITE_BASE_URL}/summary`,
+          `${import.meta.env.VITE_BASE_URL}/Summary`,
           { videoId }
         );
         if (response.data.success) {

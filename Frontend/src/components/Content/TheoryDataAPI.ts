@@ -33,6 +33,7 @@ interface MainResponse {
 export async function fetchTheoryData(videoId: string): Promise<TheoryContent> {
   try {
     // Fetch sub points (timestamps and bullet points)
+    console.log("b4 subpoints")
     const subPointsResponse = await axios.post<SubPointsResponse>(
       'http://localhost:3000/SummarySubPoints',
       { videoId }
