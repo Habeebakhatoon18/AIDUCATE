@@ -22,7 +22,7 @@ async function getYouTubeInstance() {
 }
 app.get("/Health", (req, res) => {
   res.json({
-    msg: "Everything Works fine till now"
+    msg: "Everything Works fine till now from yt "
   });
 });
 const UserModel = require("../models/UsersSchema");
