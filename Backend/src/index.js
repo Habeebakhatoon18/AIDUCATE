@@ -199,11 +199,12 @@ app.post("/Summary", async (req, res) => {
         }
 
         const input = {
-            videoUrl: `https://www.youtube.com/watch?v=${videoId}`,
+            video_url: `https://www.youtube.com/watch?v=${videoId}`,
+            language: "",
         };
 
-      //  const run = await client.actor("invideoiq/video-transcript-scraper").call(input);
-      const run = await client.task("KZijQY3uXaMvf4OnK").call();
+       const run = await client.actor("invideoiq/video-transcript-scraper").call(input);
+   
         const { items } = await client.dataset(run.defaultDatasetId).listItems();
 
         const transcriptText = items.map((item) => item.text).join(" ");
