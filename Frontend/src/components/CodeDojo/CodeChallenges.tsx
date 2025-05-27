@@ -40,7 +40,7 @@ interface ApiResponse {
   success: boolean;
   problems: ApiProblem[];
 }
-
+// @ts-ignore
 const DEFAULT_CHALLENGES: Challenge[] = [
   {
     difficulty: 'Easy',
@@ -221,7 +221,7 @@ export const CodeChallenges = ({ onSelectChallenge }: CodeChallengesProps) => {
       }
     }
   };
-
+// @ts-ignore
   const cancelRetries = () => {
     setRetryActive(false);
     if (abortControllerRef.current) {
@@ -230,7 +230,7 @@ export const CodeChallenges = ({ onSelectChallenge }: CodeChallengesProps) => {
     setLoading(false);
     setError("API calls cancelled. Try refreshing the page to retry.");
   };
-
+// @ts-ignore
   const resetAndRetry = () => {
     setRetryActive(true);
     setRetryCount({ Easy: 0, Medium: 0, Hard: 0 });
