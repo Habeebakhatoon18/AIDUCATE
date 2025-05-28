@@ -998,6 +998,7 @@ const bcrypt = require("bcrypt");
 const cors = require("cors");
 const dotenv = require('dotenv')
 const path = require("path");
+const { YoutubeTranscript } = require("youtube-transcript");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const { ApifyClient } = require('apify-client');
 const app = express();
@@ -1011,7 +1012,22 @@ const KEY1 = process.env.KEY1;
 const KEY2 = process.env.KEY2;
 const KEY3 = process.env.KEY3;
 
-app.use(cors());
+const allowedOrigins = [
+  'http://localhost:3000', // your local dev frontend
+  'https://test-zeta-two-45.vercel.app' // your deployed frontend
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type']
+}));
 app.use(express.json());
 
 mongoose
