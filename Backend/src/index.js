@@ -1034,7 +1034,7 @@ const KEY3 = process.env.KEY3;
 
 app.use(
   cors({
-    origin: ["https://test-zeta-two-45.vercel.app", "http://localhost:5173"], // Add Render URL
+    origin: ["https://test1-o6p1.onrender.com","https://test-zeta-two-45.vercel.app", "http://localhost:5173"], // Add Render URL
     credentials: true,
   })
 );
