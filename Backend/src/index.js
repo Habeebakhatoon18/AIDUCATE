@@ -1030,11 +1030,11 @@ const KEY3 = process.env.KEY3;
 // }));
 
 // app.options('*', cors());
-// app.use(express.json());
+ app.use(express.json());
 
 app.use(
   cors({
-    origin: ["https://test-zeta-two-45.vercel.app", "http://localhost:300"], // Add Render URL
+    origin: ["https://test-zeta-two-45.vercel.app", "http://localhost:5173"], // Add Render URL
     credentials: true,
   })
 );
