@@ -1005,6 +1005,7 @@ const app = express();
 const UserModel = require("../models/UsersSchema");
 const redis = require("redis");
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
+const axios = require('axios');
 
 const MONGOOSE_URL = process.env.MONGO_URL;
 const apifyClient = new ApifyClient({ token: process.env.APIFY_API_TOKEN });
@@ -1012,33 +1013,21 @@ const KEY1 = process.env.KEY1;
 const KEY2 = process.env.KEY2;
 const KEY3 = process.env.KEY3;
 
-// const allowedOrigins = [
-//   'http://localhost:3000', // your local dev frontend
-//   'https://test-zeta-two-45.vercel.app' // your deployed frontend
-// ];
+app.use(express.json());
+  const corsOptions = {
+  origin: ["http://localhost:5173",
+    "https://test1-o6p1.onrender.com"
+  ],
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type"],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
 
-// app.use(cors({
-//   origin: function (origin, callback) {
-//     if (!origin || allowedOrigins.includes(origin)) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error('Not allowed by CORS'));
-//     }
-//   },
-//   methods: ['GET', 'POST', 'OPTIONS'],
-//   allowedHeaders: ['Content-Type', 'Authorization']
-// }));
-
-// app.options('*', cors());
- app.use(express.json());
-
-app.use(
-  cors({
-    origin: ["https://test1-o6p1.onrender.com","https://test-zeta-two-45.vercel.app", "http://localhost:5173"], // Add Render URL
-    credentials: true,
-  })
-);
-
+ app.use(cors(corsOptions));      // 🔥 Global CORS config
+         
+app.options("*", cors(corsOptions));
+ 
 mongoose
 .connect(MONGOOSE_URL)
 .then(() => console.log("Connected to MongoDB"))
@@ -1173,8 +1162,10 @@ app.post("/Signup", async (req, res) => {
     });
   }
 });
+ // Preflight support for /Summary
 
 app.post("/Summary", async (req, res) => {
+  console.log("Summary route hit", req.headers.origin);
     try {
       const { videoId } = req.body;
        const transcriptObj = await getYouTubeTranscript(videoId);
@@ -1212,7 +1203,8 @@ app.post("/SummaryMain", async (req, res) => {
     const transcriptObj = await getYouTubeTranscript(videoId);
 const transcriptText = transcriptObj.transcriptText || "";
 
-
+const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${videoId}&key=${process.env.YOUTUBE_API_KEY}`;
+const response = await axios.get(apiUrl);
     const genAI = new GoogleGenerativeAI(KEY1);
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
@@ -1245,7 +1237,16 @@ const transcriptText = transcriptObj.transcriptText || "";
     const parseSection = (text, pattern) => text.match(pattern)?.[1]?.trim() || null;
     
     const title = parseSection(rawOutput, /Title:\s*(.*?)(\n|$)/i);
-    const duration = parseSection(rawOutput, /Duration:\s*(.*?)(\n|$)/i);
+   // const duration = parseSection(rawOutput, /Duration:\s*(.*?)(\n|$)/i);
+  // const duration = response.data.items[0].contentDetails.duration;
+  const durationnn = response.data.items[0].contentDetails.duration;
+const duration = durationnn.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/)
+  .slice(1)
+  .map(x => String(+x || 0).padStart(2, '0'))
+  .join(':');
+
+console.log(duration); // e.g., "00:04:10"
+
     const topics = parseSection(rawOutput, /Topics:\s*(\d+).*?Topics/i);
     const points = parseSection(rawOutput, /Points:\s*(\d+).*?Points/i);
 
