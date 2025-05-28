@@ -133,6 +133,7 @@ const parseSampleInput = (sampleInput: string): any[] => {
   }
 };
 
+
 // Parse sampleOutput string to test case output
 const parseSampleOutput = (sampleOutput: string, difficulty: string): any => {
   try {
@@ -154,6 +155,32 @@ const parseSampleOutput = (sampleOutput: string, difficulty: string): any => {
     return sampleOutput;
   }
 };
+// const parseSampleOutput = (sampleOutput: string, difficulty: string): any => {
+//   try {
+//     if (difficulty === 'Easy') {
+//       if (sampleOutput === 'True' || sampleOutput === 'False') {
+//         return sampleOutput === 'True';
+//       }
+
+//       // Try to parse arrays (like [2, 3, 5])
+//       return JSON.parse(sampleOutput);
+//     } else if (difficulty === 'Medium') {
+//       // Try to parse nested arrays (like [[2, 3], [4, 5]])
+//       return JSON.parse(sampleOutput);
+//     } else if (difficulty === 'Hard') {
+//       // Numbers or complex structures
+//       if (/^\d+$/.test(sampleOutput)) {
+//         return parseInt(sampleOutput, 10);
+//       }
+//       return JSON.parse(sampleOutput);
+//     }
+//   } catch (err) {
+//     console.warn('Could not parse sampleOutput:', sampleOutput, err);
+//     // Fallback: return raw string
+//     return sampleOutput.trim();
+//   }
+// };
+
 
 export const CodeChallenges = ({ onSelectChallenge }: CodeChallengesProps) => {
   const [challenges, setChallenges] = useState<Challenge[]>([]);
