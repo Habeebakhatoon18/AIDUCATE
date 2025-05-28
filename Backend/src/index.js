@@ -1012,25 +1012,32 @@ const KEY1 = process.env.KEY1;
 const KEY2 = process.env.KEY2;
 const KEY3 = process.env.KEY3;
 
-const allowedOrigins = [
-  'http://localhost:3000', // your local dev frontend
-  'https://test-zeta-two-45.vercel.app' // your deployed frontend
-];
+// const allowedOrigins = [
+//   'http://localhost:3000', // your local dev frontend
+//   'https://test-zeta-two-45.vercel.app' // your deployed frontend
+// ];
 
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+// app.use(cors({
+//   origin: function (origin, callback) {
+//     if (!origin || allowedOrigins.includes(origin)) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+//   methods: ['GET', 'POST', 'OPTIONS'],
+//   allowedHeaders: ['Content-Type', 'Authorization']
+// }));
 
-app.options('*', cors());
-app.use(express.json());
+// app.options('*', cors());
+// app.use(express.json());
+
+app.use(
+  cors({
+    origin: ["https://test-zeta-two-45.vercel.app", "http://localhost:300"], // Add Render URL
+    credentials: true,
+  })
+);
 
 mongoose
 .connect(MONGOOSE_URL)
